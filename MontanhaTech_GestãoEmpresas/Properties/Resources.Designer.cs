@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MontanhaTech_GestãoEmpresas.Properties {
+namespace MontanhaTech_GestaoEmpresas.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace MontanhaTech_GestãoEmpresas.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MontanhaTech_GestãoEmpresas.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MontanhaTech_GestaoEmpresas.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

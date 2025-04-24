@@ -120,8 +120,9 @@
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="logoPng - Copia" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\logoPng - Copia.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <comment>Logo da empresa ao iniciar o sistema. atualmente fixo.</comment>
   </data>
   <data name="logoPng - Copia" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\logoPng - Copia1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\logoPng - Copia2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -1,9 +1,6 @@
-﻿using MontanhaTech_GestãoEmpresas;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Forms;
+using ComponentFactory.Krypton.Toolkit;
 
 namespace MontanhaTech_GestaoEmpresas
 {
@@ -17,6 +14,9 @@ namespace MontanhaTech_GestaoEmpresas
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            KryptonManager manager = new KryptonManager();
+            manager.GlobalPaletteMode = PaletteModeManager.Office2010Blue;
             Application.Run(new TelaInicial());
         }
     }

@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ComponentFactory.Krypton.Toolkit;
+using MontanhaTech_GestaoEmpresas.Framework;
+using System;
 using System.Windows.Forms;
 
-namespace MontanhaTech_GestãoEmpresas
+namespace MontanhaTech_GestaoEmpresas
 {
-    public partial class CadastroItem : Form
+    public partial class CadastroItem : KryptonForm
     {
         public CadastroItem()
         {
             InitializeComponent();
+            Ferramenta.InsereTema();
         }
 
         private void button1_Click(object sender, EventArgs e)
