@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Cadastro Empresa");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Atualiza Banco de Dados");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Cadastro Empresa", 0, -2);
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Atualiza Banco de Dados", 3, -2);
             System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Administração", 0, -2, new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2});
@@ -66,19 +66,22 @@
             // MenuInicial
             // 
             this.MenuInicial.Dock = System.Windows.Forms.DockStyle.Left;
+            this.MenuInicial.HideSelection = false;
             this.MenuInicial.ImageIndex = 4;
             this.MenuInicial.ImageList = this.imageList1;
-            this.MenuInicial.LabelEdit = true;
+            this.MenuInicial.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.MenuInicial.Location = new System.Drawing.Point(0, 0);
             this.MenuInicial.Name = "MenuInicial";
             treeNode1.ImageIndex = 0;
             treeNode1.Name = "CadastroEmpresa";
             treeNode1.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            treeNode1.SelectedImageIndex = -2;
             treeNode1.Tag = "1";
             treeNode1.Text = "Cadastro Empresa";
             treeNode2.ImageIndex = 3;
             treeNode2.Name = "AtualizaBanco";
             treeNode2.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            treeNode2.SelectedImageIndex = -2;
             treeNode2.Tag = "2";
             treeNode2.Text = "Atualiza Banco de Dados";
             treeNode3.Checked = true;
@@ -89,12 +92,15 @@
             treeNode3.Text = "Administração";
             treeNode4.Name = "Pagar";
             treeNode4.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            treeNode4.SelectedImageIndex = -2;
             treeNode4.Text = "Contas Pagar";
             treeNode5.Name = "Receber";
             treeNode5.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            treeNode5.SelectedImageIndex = -2;
             treeNode5.Text = "Contas Receber";
             treeNode6.Name = "Finan";
             treeNode6.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            treeNode6.SelectedImageIndex = -2;
             treeNode6.Text = "Financeiro";
             treeNode7.ImageIndex = 1;
             treeNode7.Name = "CadastroCliente";
@@ -159,7 +165,9 @@
             treeNode13,
             treeNode16,
             treeNode18});
-            this.MenuInicial.SelectedImageKey = "corporativo.png";
+            this.MenuInicial.PaletteMode = Krypton.Toolkit.PaletteMode.Microsoft365Blue;
+            this.MenuInicial.PathSeparator = "";
+            this.MenuInicial.SelectedImageIndex = 0;
             this.MenuInicial.ShowNodeToolTips = true;
             this.MenuInicial.Size = new System.Drawing.Size(294, 652);
             this.MenuInicial.StateImageList = this.imageList1;
@@ -186,7 +194,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowText;
-            this.BackgroundImage = global::MontanhaTech_GestaoEmpresas.Properties.Resources.logoPng___Copia;
+            this.BackgroundImage = global::MontanhaTech_GestaoEmpresas.Properties.Resources.logo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(1223, 652);
             this.Controls.Add(this.MenuInicial);

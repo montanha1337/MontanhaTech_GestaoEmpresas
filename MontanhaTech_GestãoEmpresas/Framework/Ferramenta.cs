@@ -1,22 +1,17 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
 using System;
+using System.Collections;
 using System.Data;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows.Forms;
 
 namespace MontanhaTech_GestaoEmpresas.Framework
 {
     public class Ferramenta
     {
-        /// <summary>
-        /// obtem a chave de segurança
-        /// </summary>
-        /// <returns></returns>
-        private static string ObterChave()
-        {
-            string nomeBase = DBConnection.conexao != null ? DBConnection.conexao.Database : "DefaultDB";
-            return nomeBase.PadRight(32).Substring(0, 32);
-        }
+        #region Métodos Publicos
 
         /// <summary>
         /// criptografa o texto enviado
@@ -97,5 +92,92 @@ namespace MontanhaTech_GestaoEmpresas.Framework
             KryptonManager manager = new KryptonManager();
             manager.GlobalPaletteMode = PaletteModeManager.SparkleBlue;
         }
+
+        /// <summary>
+        /// Retorna o ramo da empresa com base parametrizado no cadastro empresa
+        /// </summary>
+        /// <returns></returns>
+        public static int RetornaTipoEmpresa()
+        {
+            DataTable Dtemp = DBConnection.ExecutarConsulta(SQLFramework.consultaRamoEmpresa);
+            return int.Parse(Dtemp.Rows[0]["TipoEmpresa"].ToString());
+        }
+
+        /// <summary>
+        /// Preenche a comboBox de acordo com a tabela
+        /// </summary>
+        /// <param name="comboBox"></param>
+        /// <param name="sql"></param>
+        /// <param name="displayMember"></param>
+        /// <param name="valueMember"></param>
+        /// <param name="adicionarSelecione"></param>
+        public static void PreencherComboBox(ComboBox comboBox, string nomeTabela, string displayMember, string valueMember, bool adicionarSelecione = true)
+        {
+            DataTable dt = DBConnection.ExecutarConsulta(string.Format(SQLFramework.PreencheComboBox, valueMember, displayMember, nomeTabela));
+
+            if (adicionarSelecione)
+            {
+                DataRow dr = dt.NewRow();
+                dr[valueMember] = 0;
+                dr[displayMember] = "Selecione...";
+                dt.Rows.InsertAt(dr, 0);
+            }
+
+            comboBox.DataSource = dt;
+            comboBox.DisplayMember = displayMember;
+            comboBox.ValueMember = valueMember;
+        }
+
+        /// <summary>
+        /// Abre o formulário de pesquisa para acesso aos dados.
+        /// </summary>
+        /// <param name="binding"></param>
+        /// <param name="tabelaBD"></param>
+        /// <param name="query"></param>
+        /// <param name="tabela"></param>
+        public static void PesquisaDados(BindingSource binding, string tabelaBD = null, string query = null, DataTable tabela = null)
+        {
+            Form formAberto = Application.OpenForms["TelaInicial"];
+
+            if (formAberto != null)
+            {
+                string sql = $@"SELECT * FROM [{tabelaBD}]";
+
+                if (!string.IsNullOrWhiteSpace(query))
+                    sql = query;
+
+                if (tabela == null)
+                    tabela = DBConnection.ExecutarConsulta(sql);
+
+                // Cria o formulário de pesquisa diretamente via construtor
+                Pesquisar formPesquisa = new Pesquisar(tabela);
+                formPesquisa.MdiParent = formAberto;
+
+                // Registra um evento para capturar o valor selecionado
+                formPesquisa.OnValorSelecionado += (valorSelecionado) =>
+                {
+                    string filtro = string.IsNullOrEmpty(valorSelecionado)
+                        ? string.Empty
+                        : $"Id = {valorSelecionado}";
+
+                    binding.Filter = filtro;
+                };
+
+                formPesquisa.Show();
+            }
+        }
+        #endregion
+
+        #region Métodos Privados
+        /// <summary>
+        /// obtem a chave de segurança
+        /// </summary>
+        /// <returns></returns>
+        private static string ObterChave()
+        {
+            string nomeBase = DBConnection.conexao != null ? DBConnection.conexao.Database : "DefaultDB";
+            return nomeBase.PadRight(32).Substring(0, 32);
+        }
+        #endregion
     }
 }

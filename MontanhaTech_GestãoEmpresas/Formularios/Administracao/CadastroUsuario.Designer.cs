@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CadastroUsuario));
             this.ativo = new System.Windows.Forms.CheckBox();
+            this.mUSRBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.tabelaUsuario = new MontanhaTech_GestaoEmpresas.DataSouces.TabelaUsuario();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.user = new System.Windows.Forms.TextBox();
@@ -38,37 +40,43 @@
             this.Btn1 = new System.Windows.Forms.Button();
             this.btn2 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.Code = new System.Windows.Forms.TextBox();
+            this.mUSRTableAdapter = new MontanhaTech_GestaoEmpresas.DataSouces.TabelaUsuarioTableAdapters.MUSRTableAdapter();
             this.bindingNavigator1 = new System.Windows.Forms.BindingNavigator(this.components);
             this.bindingNavigatorAddNewItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMoveFirstItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMovePreviousItem = new System.Windows.Forms.ToolStripButton();
+            this.bindingNavigatorSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.bindingNavigatorMoveNextItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMoveLastItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.montanhaTechDataSet1 = new MontanhaTech_GestaoEmpresas.MontanhaTechDataSet1();
-            this.tabelaUser = new MontanhaTech_GestaoEmpresas.TabelaUser();
-            this.mUSRTableAdapter = new MontanhaTech_GestaoEmpresas.MontanhaTechDataSet1TableAdapters.MUSRTableAdapter();
-            this.Code = new System.Windows.Forms.TextBox();
-            this.mUSRBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            ((System.ComponentModel.ISupportInitialize)(this.mUSRBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tabelaUsuario)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.montanhaTechDataSet1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tabelaUser)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mUSRBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // ativo
             // 
             this.ativo.AutoSize = true;
-            this.ativo.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.bindingSource1, "Active", true));
+            this.ativo.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.mUSRBindingSource, "Active", true));
             this.ativo.Location = new System.Drawing.Point(156, 31);
             this.ativo.Name = "ativo";
             this.ativo.Size = new System.Drawing.Size(50, 17);
             this.ativo.TabIndex = 0;
             this.ativo.Text = "Ativo";
             this.ativo.UseVisualStyleBackColor = true;
+            // 
+            // mUSRBindingSource
+            // 
+            this.mUSRBindingSource.DataMember = "MUSR";
+            this.mUSRBindingSource.DataSource = this.tabelaUsuario;
+            // 
+            // tabelaUsuario
+            // 
+            this.tabelaUsuario.DataSetName = "TabelaUsuario";
+            this.tabelaUsuario.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // label1
             // 
@@ -90,19 +98,19 @@
             // 
             // user
             // 
-            this.user.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource1, "User", true));
+            this.user.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mUSRBindingSource, "User", true));
             this.user.Location = new System.Drawing.Point(64, 54);
             this.user.Name = "user";
-            this.user.Size = new System.Drawing.Size(142, 20);
+            this.user.Size = new System.Drawing.Size(168, 20);
             this.user.TabIndex = 3;
             // 
             // senha
             // 
-            this.senha.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource1, "Password", true));
+            this.senha.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mUSRBindingSource, "Password", true));
             this.senha.Location = new System.Drawing.Point(64, 84);
             this.senha.Name = "senha";
             this.senha.PasswordChar = '*';
-            this.senha.Size = new System.Drawing.Size(142, 20);
+            this.senha.Size = new System.Drawing.Size(168, 20);
             this.senha.TabIndex = 4;
             this.senha.UseSystemPasswordChar = true;
             // 
@@ -136,19 +144,36 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "Código";
             // 
+            // Code
+            // 
+            this.Code.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mUSRBindingSource, "Id", true));
+            this.Code.Enabled = false;
+            this.Code.Location = new System.Drawing.Point(64, 28);
+            this.Code.Name = "Code";
+            this.Code.Size = new System.Drawing.Size(86, 20);
+            this.Code.TabIndex = 8;
+            this.Code.Text = global::MontanhaTech_GestaoEmpresas.Properties.Settings.Default.Id;
+            // 
+            // mUSRTableAdapter
+            // 
+            this.mUSRTableAdapter.ClearBeforeFill = true;
+            // 
             // bindingNavigator1
             // 
             this.bindingNavigator1.AddNewItem = this.bindingNavigatorAddNewItem;
-            this.bindingNavigator1.BindingSource = this.bindingSource1;
+            this.bindingNavigator1.BindingSource = this.mUSRBindingSource;
             this.bindingNavigator1.CountItem = null;
             this.bindingNavigator1.DeleteItem = null;
+            this.bindingNavigator1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.bindingNavigator1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.bindingNavigatorMoveFirstItem,
             this.bindingNavigatorMovePreviousItem,
+            this.bindingNavigatorSeparator,
             this.bindingNavigatorMoveNextItem,
             this.bindingNavigatorMoveLastItem,
             this.bindingNavigatorSeparator2,
-            this.bindingNavigatorAddNewItem});
+            this.bindingNavigatorAddNewItem,
+            this.toolStripButton1});
             this.bindingNavigator1.Location = new System.Drawing.Point(0, 0);
             this.bindingNavigator1.MoveFirstItem = this.bindingNavigatorMoveFirstItem;
             this.bindingNavigator1.MoveLastItem = this.bindingNavigatorMoveLastItem;
@@ -156,7 +181,7 @@
             this.bindingNavigator1.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
             this.bindingNavigator1.Name = "bindingNavigator1";
             this.bindingNavigator1.PositionItem = null;
-            this.bindingNavigator1.Size = new System.Drawing.Size(230, 25);
+            this.bindingNavigator1.Size = new System.Drawing.Size(244, 25);
             this.bindingNavigator1.TabIndex = 9;
             this.bindingNavigator1.Text = "bindingNavigator1";
             // 
@@ -177,7 +202,6 @@
             this.bindingNavigatorMoveFirstItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMoveFirstItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMoveFirstItem.Text = "Mover primeiro";
-            this.bindingNavigatorMoveFirstItem.Click += new System.EventHandler(this.bindingNavigatorMoveFirstItem_Click);
             // 
             // bindingNavigatorMovePreviousItem
             // 
@@ -187,7 +211,11 @@
             this.bindingNavigatorMovePreviousItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMovePreviousItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMovePreviousItem.Text = "Mover anterior";
-            this.bindingNavigatorMovePreviousItem.Click += new System.EventHandler(this.bindingNavigatorMovePreviousItem_Click);
+            // 
+            // bindingNavigatorSeparator
+            // 
+            this.bindingNavigatorSeparator.Name = "bindingNavigatorSeparator";
+            this.bindingNavigatorSeparator.Size = new System.Drawing.Size(6, 25);
             // 
             // bindingNavigatorMoveNextItem
             // 
@@ -197,7 +225,6 @@
             this.bindingNavigatorMoveNextItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMoveNextItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMoveNextItem.Text = "Mover próximo";
-            this.bindingNavigatorMoveNextItem.Click += new System.EventHandler(this.bindingNavigatorMoveNextItem_Click);
             // 
             // bindingNavigatorMoveLastItem
             // 
@@ -207,52 +234,27 @@
             this.bindingNavigatorMoveLastItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMoveLastItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMoveLastItem.Text = "Mover último";
-            this.bindingNavigatorMoveLastItem.Click += new System.EventHandler(this.bindingNavigatorMoveLastItem_Click);
             // 
             // bindingNavigatorSeparator2
             // 
             this.bindingNavigatorSeparator2.Name = "bindingNavigatorSeparator2";
             this.bindingNavigatorSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
-            // bindingSource1
+            // toolStripButton1
             // 
-            this.bindingSource1.DataMember = "MUSR";
-            this.bindingSource1.DataSource = this.montanhaTechDataSet1;
-            // 
-            // montanhaTechDataSet1
-            // 
-            this.montanhaTechDataSet1.DataSetName = "MontanhaTechDataSet1";
-            this.montanhaTechDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // tabelaUser
-            // 
-            this.tabelaUser.DataSetName = "TabelaUser";
-            this.tabelaUser.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // mUSRTableAdapter
-            // 
-            this.mUSRTableAdapter.ClearBeforeFill = true;
-            // 
-            // Code
-            // 
-            this.Code.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource1, "Id", true));
-            this.Code.Enabled = false;
-            this.Code.Location = new System.Drawing.Point(64, 28);
-            this.Code.Name = "Code";
-            this.Code.Size = new System.Drawing.Size(86, 20);
-            this.Code.TabIndex = 8;
-            this.Code.Text = global::MontanhaTech_GestaoEmpresas.Properties.Settings.Default.Id;
-            // 
-            // mUSRBindingSource
-            // 
-            this.mUSRBindingSource.DataMember = "MUSR";
-            this.mUSRBindingSource.DataSource = this.montanhaTechDataSet1;
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = global::MontanhaTech_GestaoEmpresas.Properties.Resources.loupe;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // CadastroUsuario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(230, 170);
+            this.ClientSize = new System.Drawing.Size(244, 170);
             this.Controls.Add(this.bindingNavigator1);
             this.Controls.Add(this.Code);
             this.Controls.Add(this.label3);
@@ -267,13 +269,11 @@
             this.Name = "CadastroUsuario";
             this.Text = "Cadastro Usuário";
             this.Load += new System.EventHandler(this.CadastroUsuario_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.mUSRBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tabelaUsuario)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();
             this.bindingNavigator1.ResumeLayout(false);
             this.bindingNavigator1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.montanhaTechDataSet1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tabelaUser)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mUSRBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -290,17 +290,17 @@
         private System.Windows.Forms.Button btn2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox Code;
+        private DataSouces.TabelaUsuario tabelaUsuario;
+        private System.Windows.Forms.BindingSource mUSRBindingSource;
+        private DataSouces.TabelaUsuarioTableAdapters.MUSRTableAdapter mUSRTableAdapter;
         private System.Windows.Forms.BindingNavigator bindingNavigator1;
         private System.Windows.Forms.ToolStripButton bindingNavigatorAddNewItem;
         private System.Windows.Forms.ToolStripButton bindingNavigatorMoveFirstItem;
         private System.Windows.Forms.ToolStripButton bindingNavigatorMovePreviousItem;
+        private System.Windows.Forms.ToolStripSeparator bindingNavigatorSeparator;
         private System.Windows.Forms.ToolStripButton bindingNavigatorMoveNextItem;
         private System.Windows.Forms.ToolStripButton bindingNavigatorMoveLastItem;
         private System.Windows.Forms.ToolStripSeparator bindingNavigatorSeparator2;
-        private System.Windows.Forms.BindingSource bindingSource1;
-        private TabelaUser tabelaUser;
-        private MontanhaTechDataSet1 montanhaTechDataSet1;
-        private MontanhaTechDataSet1TableAdapters.MUSRTableAdapter mUSRTableAdapter;
-        private System.Windows.Forms.BindingSource mUSRBindingSource;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }

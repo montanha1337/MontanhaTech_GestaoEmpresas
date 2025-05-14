@@ -25,9 +25,6 @@ namespace MontanhaTech_GestaoEmpresas
 
                 Ferramenta.InsereTema();
                 ConfigurarTreeViewVisual();
-
-
-
             } catch (Exception E)
             {
                 new PadraoRetorno().ApresentaErroTela($@"Erro ao iniciar o sistema: {E.Message}");
@@ -68,6 +65,10 @@ namespace MontanhaTech_GestaoEmpresas
                     AtualizaBancoDados.Show();
                     break;
                 case "3":// Cadastro Cliente
+                    CadastroCliente CadastroCliente = new CadastroCliente();
+                    CadastroCliente.MdiParent = this;
+                    CadastroCliente.Show();
+                    CadastroCliente.BringToFront();
                     break;
                 case "4":// Cadastro Item
                     CadastroItem CadastroItem = new CadastroItem();
@@ -88,41 +89,14 @@ namespace MontanhaTech_GestaoEmpresas
                 default:// Caso não instanciado
                     break;
             }
+
+            // Desmarca o item selecionado
+            MenuInicial.SelectedNode = null;
         }
         void ConfigurarTreeViewVisual()
         {
             TreeView treeView = this.MenuInicial.TreeView;
-            treeView.DrawMode = TreeViewDrawMode.OwnerDrawText;
             treeView.HideSelection = false; // Evita que o item selecionado mude visualmente
-
-            treeView.DrawNode += (s, e) =>
-            {
-                // Verifica se o nó está selecionado e desenha o fundo fixo
-                if (e.State.HasFlag(TreeNodeStates.Selected))
-                {
-                    e.Graphics.FillRectangle(Brushes.White, e.Bounds); // Fundo fixo mesmo quando selecionado
-                } else
-                {
-                    e.Graphics.FillRectangle(Brushes.White, e.Bounds); // Mesmo fundo para nós não selecionados
-                }
-
-                Font fonte = e.Node.NodeFont ?? treeView.Font;
-                Brush corTexto = Brushes.Black; // Cor fixa do texto
-
-                // Desenha o ícone se houver ImageList configurado
-                if (treeView.ImageList != null && e.Node.ImageIndex >= 0)
-                {
-                    Image img = treeView.ImageList.Images[e.Node.ImageIndex];
-                    int iconY = e.Bounds.Top + (e.Bounds.Height - img.Height) / 2;
-                    e.Graphics.DrawImage(img, e.Bounds.Left - 20, iconY); // Posição do ícone
-                }
-
-                // Desenha o texto do nó
-                e.Graphics.DrawString(e.Node.Text, fonte, corTexto, e.Bounds.X, e.Bounds.Y);
-
-                // Impede o desenho padrão (alteração de seleção)
-                e.DrawDefault = false;
-            };
         }
     }
 }

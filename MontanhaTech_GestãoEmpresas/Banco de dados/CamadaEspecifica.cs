@@ -1,6 +1,7 @@
-﻿using System;
+﻿using MontanhaTech_GestaoEmpresas.Framework;
+using System;
 
-namespace MontanhaTech_GestaoEmpresas.Banco_de_dados
+namespace MontanhaTech_GestaoEmpresas
 {
     public class CamadaEspecifica
     {
@@ -9,10 +10,22 @@ namespace MontanhaTech_GestaoEmpresas.Banco_de_dados
         {
             try
             {
-                //padraoRetorno = Oficina();
+                int TipoEmpresa = Ferramenta.RetornaTipoEmpresa();
 
-                //if (padraoRetorno.Sucesso)
-                //    padraoRetorno = CadastroEmpresa();
+                switch (TipoEmpresa)
+                {
+                    case 1: // Oficina
+                        padraoRetorno = Oficina();
+                        break;
+                    case 2: // Loja Varejo
+                        //padraoRetorno = LojaVarejo();
+                        break;
+                    case 3: // Loja Informática
+                        //padraoRetorno = LojaInformatica();
+                        break;
+                    default:
+                        break;
+                }
 
                 if (!padraoRetorno.Sucesso)
                     throw new Exception(padraoRetorno.Mensagem);
@@ -25,10 +38,13 @@ namespace MontanhaTech_GestaoEmpresas.Banco_de_dados
             }
         }
 
+        /// <summary>
+        /// Inclui as tabelas de oficina utilizadas para o ramo oficina.
+        /// </summary>
+        /// <returns></returns>
         public PadraoRetorno Oficina()
         {
-            string tabela = "MOFC";
-            padraoRetorno = DBConnection.CriarTabela(tabela);
+            padraoRetorno = CadastroClienteMotos();
 
             //if (padraoRetorno.Sucesso)
             //    padraoRetorno = DBConnection.CriaCampo(tabela, "User", TipoCampo.Texto);
@@ -39,8 +55,29 @@ namespace MontanhaTech_GestaoEmpresas.Banco_de_dados
             //if (padraoRetorno.Sucesso)
             //    padraoRetorno = DBConnection.CriaCampo(tabela, "Active", TipoCampo.Bool);
 
-            //if (!padraoRetorno.Sucesso)
-            //    throw new Exception(padraoRetorno.Mensagem);
+            return padraoRetorno;
+        }
+
+        /// <summary>
+        /// Tabela de motos
+        /// </summary>
+        /// <returns></returns>
+        public PadraoRetorno CadastroClienteMotos()
+        {
+            string tabela = "MCMT";
+            padraoRetorno = DBConnection.CriarTabela(tabela);
+
+            if (padraoRetorno.Sucesso)
+                padraoRetorno = DBConnection.CriaCampo(tabela, "Modelo", TipoCampo.Texto);
+
+            if (padraoRetorno.Sucesso)
+                padraoRetorno = DBConnection.CriaCampo(tabela, "Placa", TipoCampo.TextoLongo);
+
+            if (padraoRetorno.Sucesso)
+                padraoRetorno = DBConnection.CriaCampo(tabela, "Ativo", TipoCampo.Bool);
+
+            if (padraoRetorno.Sucesso)
+                padraoRetorno = DBConnection.CriaCampo(tabela, "IdCliente", TipoCampo.Numero,255, "MCLI");
 
             return padraoRetorno;
         }

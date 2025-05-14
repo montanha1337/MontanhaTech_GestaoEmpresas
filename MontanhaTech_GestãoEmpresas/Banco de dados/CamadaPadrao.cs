@@ -1,31 +1,44 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MontanhaTech_GestaoEmpresas
 {
     public class CamadaPadrao
     {
-        PadraoRetorno padraoRetorno = new PadraoRetorno();
+        #region Variaveis
+        private PadraoRetorno padraoRetorno = new PadraoRetorno();
         private string msgErro;
         private bool tabelacriada;
+        #endregion
 
+        #region Metodo Publico
         public PadraoRetorno CriaCamadaPadrao()
         {
             try
             {
-                msgErro += Login().Mensagem;
-                msgErro += CadastroEmpresa().Mensagem;
-                msgErro += CadastroItem().Mensagem;
-                msgErro += CadastroCliente().Mensagem;
-                msgErro += CadastroNotaFiscal_Cabecalho().Mensagem;
-                msgErro += CadastroNotaFiscal_Itens().Mensagem;
-                msgErro += CadastroCFOP().Mensagem;
-                msgErro += CadastroTributacao().Mensagem;
-                msgErro += CadastroUF().Mensagem;
-                msgErro += CadastroMunicipio().Mensagem;
-                msgErro += CadastroTabelaControle().Mensagem;
-                msgErro += CadastroFornecedor().Mensagem;
-                msgErro += CadastroConsultor().Mensagem;
-                msgErro += CadastroConsultorFornecedor().Mensagem;
+                string msgErro = "";
+
+                // Login
+                msgErro += Login();
+
+                // Cadastro Empresa
+                msgErro += CadastroEmpresa();
+
+                // Tributação e Impostos
+                msgErro += CadastroTributacao();
+
+                // Cadastro de Dados Gerais
+                msgErro += CadastroItem();
+                msgErro += CadastroCliente();
+                msgErro += CadastroFornecedor();
+                msgErro += CadastroConsultor();
+                msgErro += CadastroConsultorFornecedor();
+
+                // Cadastro de Notas Fiscais
+                msgErro += CadastroNotaFiscal();
+
+                // Cadastro de Controle e Outras Tabelas
+                msgErro += CadastroTabelaControle();
 
                 if (!padraoRetorno.Sucesso)
                     throw new Exception(msgErro);
@@ -38,6 +51,19 @@ namespace MontanhaTech_GestaoEmpresas
                 return padraoRetorno;
             }
         }
+        #endregion
+
+        #region Categoria
+        private string CadastroNotaFiscal()
+        {
+            string msgErro = "";
+            msgErro += CadastroNotaFiscal_Cabecalho().Mensagem;
+            msgErro += CadastroNotaFiscal_Itens().Mensagem;
+            return msgErro;
+        }
+        #endregion
+
+        #region Modulos
 
         public PadraoRetorno Login()
         {
@@ -61,6 +87,8 @@ namespace MontanhaTech_GestaoEmpresas
 
         public PadraoRetorno CadastroEmpresa()
         {
+            CadastroTipoEmpresa(); // tabela associada ao um campo
+
             string tabela = "MEMP";
 
             padraoRetorno = DBConnection.CriarTabela(tabela);
@@ -78,7 +106,7 @@ namespace MontanhaTech_GestaoEmpresas
                 msgErro += DBConnection.CriaCampo(tabela, "CaminhoLogo", TipoCampo.TextoLongo);
 
             if (tabelacriada)
-                msgErro += DBConnection.CriaCampo(tabela, "TipoEmpresa", TipoCampo.Numero);
+                msgErro += DBConnection.CriaCampo(tabela, "TipoEmpresa", TipoCampo.Numero, 255, "MTEP");
 
             if (tabelacriada)
                 msgErro += DBConnection.CriaCampo(tabela, "RazaoSocial", TipoCampo.Texto, 100);
@@ -137,6 +165,40 @@ namespace MontanhaTech_GestaoEmpresas
 
             return padraoRetorno;
         }
+
+        public PadraoRetorno CadastroTipoEmpresa()
+        {
+            string tabela = "MTEP";
+            padraoRetorno = DBConnection.CriarTabela(tabela);
+
+            if (tabelacriada)
+                msgErro += DBConnection.CriaCampo(tabela, "RegraNegocio", TipoCampo.Texto);
+
+            List<string> nomes = new List<string> { "Oficina", "Loja Varejo", "Loja Informática" };
+
+            foreach (string nome in nomes)
+            {
+                if (tabelacriada)
+                {
+                    string sql = $"SELECT 1 FROM {tabela} WHERE RegraNegocio = '{nome.Replace("'", "''")}'";
+                    bool existe = DBConnection.ExisteRegistro(sql);
+                    if (!existe)
+                    {
+                        DBConnection.InserirOuAtualizarRegistro(tabela, new List<(string campo, object valor)>
+                {
+                    ("RegraNegocio", nome)
+                });
+                    }
+                }
+            }
+
+            if (!padraoRetorno.Sucesso)
+                throw new Exception(padraoRetorno.Mensagem);
+
+            return padraoRetorno;
+        }
+
+
 
         public PadraoRetorno CadastroItem()
         {
@@ -521,5 +583,6 @@ namespace MontanhaTech_GestaoEmpresas
 
             return padraoRetorno;
         }
+        #endregion
     }
 }

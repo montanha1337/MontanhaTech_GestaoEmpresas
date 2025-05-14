@@ -95,7 +95,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::MontanhaTech_GestaoEmpresas.Properties.Resources.logoPng___Copia;
+            this.pictureBox1.Image = global::MontanhaTech_GestaoEmpresas.Properties.Resources.logo;
             this.pictureBox1.InitialImage = null;
             this.pictureBox1.Location = new System.Drawing.Point(65, 36);
             this.pictureBox1.Name = "pictureBox1";

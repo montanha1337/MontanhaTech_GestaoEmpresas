@@ -35,6 +35,19 @@ namespace MontanhaTech_GestaoEmpresas
         {
             return conexao != null && conexao.State == System.Data.ConnectionState.Open;
         }
+
+        /// <summary>
+        /// Fecha a conexão ativa
+        /// </summary>
+        public static void FecharConexao()
+        {
+            if (conexao != null && conexao.State != ConnectionState.Closed)
+            {
+                conexao.Close();
+                conexao.Dispose();
+                conexao = null;
+            }
+        }
         #endregion
 
         #region Alteração banco de dados
@@ -80,7 +93,7 @@ namespace MontanhaTech_GestaoEmpresas
         /// <param name="nomeCampo"></param>
         /// <param name="tipoPadrao"></param>
         /// <exception cref="ArgumentException"></exception>
-        public static PadraoRetorno CriaCampo(string nomeTabela, string nomeCampo, TipoCampo tipoPadrao, int tamanho = 255)
+        public static PadraoRetorno CriaCampo(string nomeTabela, string nomeCampo, TipoCampo tipoPadrao, int tamanho = 255, string tabelaReferencia = null)
         {
             PadraoRetorno padraoRetorno = new PadraoRetorno();
 
@@ -120,11 +133,11 @@ namespace MontanhaTech_GestaoEmpresas
 
                 // Verifica se o campo já existe
                 string sqlVerifica = $@"
-            SELECT DATA_TYPE + 
-                   ISNULL('(' + CAST(CHARACTER_MAXIMUM_LENGTH AS VARCHAR) + ')', '') AS Tipo
-            FROM INFORMATION_SCHEMA.COLUMNS 
-            WHERE TABLE_NAME = '{nomeTabela}' 
-              AND COLUMN_NAME = '{nomeCampo}'";
+        SELECT DATA_TYPE + 
+               ISNULL('(' + CAST(CHARACTER_MAXIMUM_LENGTH AS VARCHAR) + ')', '') AS Tipo
+        FROM INFORMATION_SCHEMA.COLUMNS 
+        WHERE TABLE_NAME = '{nomeTabela}' 
+          AND COLUMN_NAME = '{nomeCampo}'";
 
                 string tipoExistente = null;
 
@@ -132,12 +145,11 @@ namespace MontanhaTech_GestaoEmpresas
                 using (SqlDataReader reader = cmdVerifica.ExecuteReader())
                 {
                     if (reader.Read())
-                        tipoExistente = reader.GetString(0).Replace("(-1)", "(MAX)"); // garantir comparação case-insensitive
+                        tipoExistente = reader.GetString(0).Replace("(-1)", "(MAX)");
                 }
 
                 if (!string.IsNullOrEmpty(tipoExistente))
                 {
-                    // Já existe com mesmo tipo
                     if (tipoExistente.Equals(tipoSql, StringComparison.OrdinalIgnoreCase))
                     {
                         return new PadraoRetorno()
@@ -162,10 +174,27 @@ namespace MontanhaTech_GestaoEmpresas
                     cmd.ExecuteNonQuery();
                 }
 
+                // Se houver tabela de referência, cria o relacionamento (chave estrangeira)
+                if (!string.IsNullOrEmpty(tabelaReferencia))
+                {
+                    string nomeConstraint = $"FK_{nomeTabela}_{nomeCampo}";
+
+                    string sqlFk = $@"
+            ALTER TABLE {nomeTabela}
+            ADD CONSTRAINT {nomeConstraint}
+            FOREIGN KEY([{nomeCampo}])
+            REFERENCES {tabelaReferencia}(Id)";
+
+                    using (SqlCommand cmdFk = new SqlCommand(sqlFk, conexao))
+                    {
+                        cmdFk.ExecuteNonQuery();
+                    }
+                }
+
                 return new PadraoRetorno()
                 {
                     Sucesso = true,
-                    Mensagem = $@"Sucesso ao incluir o campo {nomeCampo}."
+                    Mensagem = $@"Sucesso ao incluir o campo {nomeCampo}" + (string.IsNullOrEmpty(tabelaReferencia) ? "." : " e criar a associação.")
                 };
             } catch (Exception E)
             {
@@ -176,6 +205,7 @@ namespace MontanhaTech_GestaoEmpresas
                 };
             }
         }
+
         #endregion
 
         #region Alteração Registro
@@ -209,6 +239,49 @@ namespace MontanhaTech_GestaoEmpresas
                 return reader.HasRows;
             }
         }
+        public static PadraoRetorno VerificarDiferencaRegistro(string tabela, Dictionary<string, object> condicoes, Dictionary<string, object> novosDados)
+        {
+            PadraoRetorno retorno = new PadraoRetorno();
+
+            // Monta a cláusula WHERE
+            List<string> filtros = new List<string>();
+            foreach (KeyValuePair<string, object> item in condicoes)
+            {
+                filtros.Add($"{item.Key} = '{item.Value}'");
+            }
+
+            string whereClause = string.Join(" AND ", filtros);
+            string query = $"SELECT * FROM {tabela} WHERE {whereClause}";
+
+            DataTable resultado = ExecutarConsulta(query);
+
+            if (resultado.Rows.Count == 0)
+            {
+                retorno.Sucesso = false; // Registro não existe, precisa inserir
+                retorno.Mensagem = "Registro não encontrado.";
+                return retorno;
+            }
+
+            DataRow linha = resultado.Rows[0];
+            foreach (KeyValuePair<string, object> dado in novosDados)
+            {
+                string valorAtual = linha[dado.Key]?.ToString()?.Trim();
+                string valorNovo = dado.Value?.ToString()?.Trim();
+
+                if (!string.Equals(valorAtual, valorNovo, StringComparison.OrdinalIgnoreCase))
+                {
+                    retorno.Sucesso = false; // Existe diferença, precisa atualizar
+                    retorno.Mensagem = $"Campo '{dado.Key}' diferente.";
+                    return retorno;
+                }
+            }
+
+            retorno.Sucesso = true; // Dados iguais, não precisa atualizar
+            retorno.Mensagem = "Registro já está atualizado.";
+            return retorno;
+        }
+
+
 
         /// <summary>
         /// Insere Registros a partir de uma lista.
@@ -237,11 +310,7 @@ namespace MontanhaTech_GestaoEmpresas
                     }
                 } else
                 {
-                    string sqlCheck = $"SELECT COUNT(1) FROM {nomeTabela}";
-                    using (SqlCommand cmd = new SqlCommand(sqlCheck, conexao))
-                    {
-                        registroExiste = (int)cmd.ExecuteScalar() > 0;
-                    }
+                    registroExiste = false;
                 }
 
                 if (registroExiste)
@@ -290,16 +359,26 @@ namespace MontanhaTech_GestaoEmpresas
             return retorno;
         }
 
-        public PadraoRetorno VerificarExistencia(string tabela, string campoID1, int id1, string campoID2, int id2)
+        public PadraoRetorno VerificarExistencia(string tabela, Dictionary<string, string> camposValores)
         {
             padraoRetorno = new PadraoRetorno();
 
-            // Query para verificar a existência do registro
-            string query = $"SELECT COUNT(1) FROM {tabela} WHERE {campoID1} = {id1} AND {campoID2} = {id2}";
+            // Constrói a parte da cláusula WHERE da query dinamicamente com base no Dictionary
+            string query = $"SELECT COUNT(1) FROM {tabela} WHERE ";
+
+            var conditions = new List<string>();
+            foreach (var campoValor in camposValores)
+            {
+                // Adiciona cada campo e valor à condição da query
+                conditions.Add($"{campoValor.Key} = '{campoValor.Value}'");
+            }
+
+            query += string.Join(" AND ", conditions); // Junta as condições com 'AND'
 
             // Executa a consulta
             var resultado = ExecutarConsulta(query);
 
+            // Verifica se há resultados
             if (resultado.Rows.Count > 0)
             {
                 padraoRetorno.Sucesso = true;
@@ -360,8 +439,15 @@ namespace MontanhaTech_GestaoEmpresas
         {
             padraoRetorno = new PadraoRetorno();
 
-            // Verifica se a associação já existe
-            var existeAssociacao = VerificarExistencia(tabelaAssociacao, campoID1, id1, campoID2, id2);
+            // Verifica se a associação já existe// Criando um dicionário com os campos e valores a serem verificados
+            Dictionary<string, string> camposValores = new Dictionary<string, string>
+                                    {
+                                        { campoID1, $"{id1}" },
+                                        { campoID2, $"{id2}" }
+                                    };
+
+            // Chama a função de verificação de existência passando o dicionário de campos e valores
+            var existeAssociacao = VerificarExistencia(tabelaAssociacao, camposValores);
             if (existeAssociacao.Sucesso)
             {
                 padraoRetorno.Sucesso = true;

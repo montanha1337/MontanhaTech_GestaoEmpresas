@@ -1,7 +1,12 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
+using MontanhaTech_GestaoEmpresas.DataSouces.TabelaEmpresaTableAdapters;
+using MontanhaTech_GestaoEmpresas.DataSouces;
 using MontanhaTech_GestaoEmpresas.Framework;
 using System;
-using System.Collections.Generic;
+using System.Data;
+using System.Reflection;
+using MontanhaTech_GestaoEmpresas.DataSouces.TabelaUsuarioTableAdapters;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace MontanhaTech_GestaoEmpresas
@@ -16,24 +21,65 @@ namespace MontanhaTech_GestaoEmpresas
 
         private void CadastroUsuario_Load(object sender, EventArgs e)
         {
-            // TODO: esta linha de código carrega dados na tabela 'montanhaTechDataSet1.MUSR'. Você pode movê-la ou removê-la conforme necessário.
-            this.mUSRTableAdapter.Fill(this.montanhaTechDataSet1.MUSR);
+            // TODO: esta linha de código carrega dados na tabela 'tabelaUsuario.MUSR'. Você pode movê-la ou removê-la conforme necessário.
+            this.mUSRTableAdapter.Fill(this.tabelaUsuario.MUSR);
 
         }
 
         private void Btn1_Click(object sender, EventArgs e)
         {
-            var Usuario = new List<(string campo, object valor)>
+            try
             {
-                ("Id", Code.Text),
-                ("User", user.Text.ToString()),
-                ("Password", Ferramenta.Criptografar(senha.Text)),
-                ("Active", ativo.Checked)
+                // Finaliza a edição do BindingSource
+                mUSRBindingSource.EndEdit();
 
-            };
-            var retorno = DBConnection.InserirOuAtualizarRegistro("MUSR", Usuario);
-            this.mUSRTableAdapter.Fill(this.montanhaTechDataSet1.MUSR);
-            MessageBox.Show(retorno.Mensagem);
+                // Verifica se o registro já existe no DataTable
+                DataRow linhaExistente = tabelaUsuario.MUSR.Rows
+                    .Cast<DataRow>()
+                    .FirstOrDefault(row => row["Id"].Equals(((DataRowView)mUSRBindingSource.Current)["Id"]));
+
+                bool inserido = false;
+
+                if (linhaExistente == null)
+                {
+                    // Adiciona uma nova linha se não encontrar o registro existente
+                    DataRowView row = (DataRowView)mUSRBindingSource.Current;
+
+                    MethodInfo insertMethod = typeof(MUSRTableAdapter).GetMethod("Insert");
+                    ParameterInfo[] parametros = insertMethod.GetParameters();
+                    object[] valores = new object[parametros.Length];
+
+                    for (int i = 0; i < parametros.Length; i++)
+                    {
+                        string nomeColuna = parametros[i].Name;
+                        object valor = row.Row.Table.Columns.Contains(nomeColuna) ? row[nomeColuna] : null;
+
+                        if (valor == DBNull.Value || valor == null)
+                        {
+                            // Define valores padrão
+                            if (parametros[i].ParameterType == typeof(string)) valor = "";
+                            else if (parametros[i].ParameterType == typeof(byte[])) valor = new byte[0];
+                            else if (parametros[i].ParameterType.IsValueType) valor = Activator.CreateInstance(parametros[i].ParameterType);
+                        }
+
+                        valores[i] = valor;
+                    }
+                    inserido = true;
+                    insertMethod.Invoke(mUSRTableAdapter, valores);
+                } else
+                {
+                    // Atualiza o DataTable e aplica as alterações
+                    mUSRTableAdapter.Update(tabelaUsuario.MUSR);
+                }
+
+                tabelaUsuario.MUSR.AcceptChanges();
+
+                // Exibe a mensagem personalizada de acordo com a ação realizada
+                new PadraoRetorno().ApresentaSucessoTela(inserido ? "Registro inserido com sucesso!" : "Registro atualizado com sucesso!");
+            } catch (Exception ex)
+            {
+                new PadraoRetorno().ApresentaErroTela(ex.Message);
+            }
         }
 
         private void btn2_Click(object sender, EventArgs e)
@@ -41,40 +87,16 @@ namespace MontanhaTech_GestaoEmpresas
             this.Close();
         }
 
-        private void bindingNavigatorMoveFirstItem_Click(object sender, EventArgs e)
+        private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            //    DataTable usuario = Ferramenta.PesquisaTabela("MUSR", 1);
-            //    Code.Text = usuario.Rows[0]["Id"].ToString();
-            //    user.Text = usuario.Rows[0]["User"].ToString();
-            //    senha.Text = Ferramenta.Descriptografar(usuario.Rows[0]["Password"].ToString());
-            //    ativo.Checked = Convert.ToBoolean(usuario.Rows[0]["Active"]);
-        }
-
-        private void bindingNavigatorMoveLastItem_Click(object sender, EventArgs e)
-        {
-            //    DataTable usuario = Ferramenta.PesquisaTabela("MUSR", 2);
-            //    Code.Text = usuario.Rows[0]["Id"].ToString();
-            //    user.Text = usuario.Rows[0]["User"].ToString();
-            //    senha.Text = Ferramenta.Descriptografar(usuario.Rows[0]["Password"].ToString());
-            //    ativo.Checked = Convert.ToBoolean(usuario.Rows[0]["Active"]);
-        }
-
-        private void bindingNavigatorMovePreviousItem_Click(object sender, EventArgs e)
-        {
-            //    DataTable usuario = Ferramenta.PesquisaTabela("MUSR", 3);
-            //    Code.Text = usuario.Rows[0]["Id"].ToString();
-            //    user.Text = usuario.Rows[0]["User"].ToString();
-            //    senha.Text = Ferramenta.Descriptografar(usuario.Rows[0]["Password"].ToString());
-            //    ativo.Checked = Convert.ToBoolean(usuario.Rows[0]["Active"]);
-        }
-
-        private void bindingNavigatorMoveNextItem_Click(object sender, EventArgs e)
-        {
-            //    DataTable usuario = Ferramenta.PesquisaTabela("MUSR", 4);
-            //    Code.Text = usuario.Rows[0]["Id"].ToString();
-            //    user.Text = usuario.Rows[0]["User"].ToString();
-            //    senha.Text = Ferramenta.Descriptografar(usuario.Rows[0]["Password"].ToString());
-            //    ativo.Checked = Convert.ToBoolean(usuario.Rows[0]["Active"]);
+            try
+            {
+                Ferramenta.PesquisaDados(mUSRBindingSource, "MUSR");
+            } catch (Exception C)
+            {
+                // Exibe uma mensagem de erro para o usuário caso ocorra uma exceção
+                new PadraoRetorno().ApresentaErroTela(C.Message);
+            }
         }
     }
 }

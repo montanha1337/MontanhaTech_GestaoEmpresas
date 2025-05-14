@@ -1,10 +1,12 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
+using MontanhaTech_GestaoEmpresas.DataSouces.TabelaEmpresaTableAdapters;
 using MontanhaTech_GestaoEmpresas.Framework;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MontanhaTech_GestaoEmpresas
@@ -15,86 +17,94 @@ namespace MontanhaTech_GestaoEmpresas
         {
             InitializeComponent();
             Ferramenta.InsereTema();
+            Ferramenta.PreencherComboBox(TipoEmp, "MTEP", "RegraNegocio", "Id");
         }
 
         private void CadastroEmpresa_Load(object sender, EventArgs e)
         {
-
-            Ramo.DisplayMember = "Key";
-            Ramo.ValueMember = "Value";
-            Ramo.DataSource = new[]
-            {
-                new KeyValuePair<string, string>("Oficina", "1"),
-                new KeyValuePair<string, string>("Loja Varejo", "2"),
-                new KeyValuePair<string, string>("Loja Informatica", "3")
-            };
-
-            DataTable empresa = DBConnection.ExecutarConsulta("SELECT [CNPJ], [Logo], [NomeEmpresa], [TipoEmpresa], [CaminhoLogo]  FROM [dbo].[MEMP]");
-            NomeEmpresa.Text = empresa.Rows[0]["NomeEmpresa"].ToString();
-            Cnpj.Text = empresa.Rows[0]["CNPJ"].ToString();
-            Ramo.SelectedValue = empresa.Rows[0]["TipoEmpresa"].ToString();
-            NomeEmpresa.Text = empresa.Rows[0]["NomeEmpresa"].ToString();
-            Logo.Text = empresa.Rows[0]["CaminhoLogo"].ToString();
-
-            // Carregar a imagem (Logo) do banco de dados e atribuir ao PictureBox
-            if (empresa.Rows[0]["Logo"] != DBNull.Value)
-            {
-                byte[] logoBytes = (byte[])empresa.Rows[0]["Logo"];
-                using (MemoryStream ms = new MemoryStream(logoBytes))
-                {
-                    PbLogo.Image = Image.FromStream(ms);
-                }
-            }
-
+            // TODO: esta linha de código carrega dados na tabela 'tabelaEmpresa.MEMP'. Você pode movê-la ou removê-la conforme necessário.
+            this.mEMPTableAdapter.Fill(this.tabelaEmpresa.MEMP);
         }
 
         private void Btn1_Click(object sender, EventArgs e)
         {
-
-            // Converte a imagem do PictureBox para byte[]
-            using (MemoryStream ms = new MemoryStream())
+            try
             {
-                PbLogo.Image.Save(ms, PbLogo.Image.RawFormat);
+                // Finaliza a edição do BindingSource
+                mEMPBindingSource.EndEdit();
 
-                var Empresa = new List<(string campo, object valor)>
+                // Verifica se o registro já existe no DataTable
+                DataRow linhaExistente = tabelaEmpresa.MEMP.Rows
+                    .Cast<DataRow>()
+                    .FirstOrDefault(row => row["Id"].Equals(((DataRowView)mEMPBindingSource.Current)["Id"]));
+
+                bool inserido = false;
+
+                if (linhaExistente == null)
+                {
+                    // Adiciona uma nova linha se não encontrar o registro existente
+                    DataRowView row = (DataRowView)mEMPBindingSource.Current;
+
+                    MethodInfo insertMethod = typeof(MEMPTableAdapter).GetMethod("Insert");
+                    ParameterInfo[] parametros = insertMethod.GetParameters();
+                    object[] valores = new object[parametros.Length];
+
+                    for (int i = 0; i < parametros.Length; i++)
+                    {
+                        string nomeColuna = parametros[i].Name;
+                        object valor = row.Row.Table.Columns.Contains(nomeColuna) ? row[nomeColuna] : null;
+
+                        if (valor == DBNull.Value || valor == null)
+                        {
+                            // Define valores padrão
+                            if (parametros[i].ParameterType == typeof(string)) valor = "";
+                            else if (parametros[i].ParameterType == typeof(byte[])) valor = new byte[0];
+                            else if (parametros[i].ParameterType.IsValueType) valor = Activator.CreateInstance(parametros[i].ParameterType);
+                        }
+
+                        valores[i] = valor;
+                    }
+
+                    insertMethod.Invoke(mEMPTableAdapter, valores);
+                    inserido = true;
+                } else
+                {
+                    // Atualiza o DataTable e aplica as alterações
+                    mEMPTableAdapter.Update(tabelaEmpresa.MEMP);
+                }
+
+                tabelaEmpresa.MEMP.AcceptChanges();
+
+                // Exibe a mensagem personalizada de acordo com a ação realizada
+                new PadraoRetorno().ApresentaSucessoTela(inserido ? "Registro inserido com sucesso!" : "Registro atualizado com sucesso!");
+            } catch (Exception ex)
             {
-                ("Id", 1),
-                ("NomeEmpresa", NomeEmpresa.Text),
-                ("CNPJ", Cnpj.Text),
-                ("TipoEmpresa", Ramo.SelectedValue.ToString()),
-                ("Logo", ms.ToArray()),
-                ("CaminhoLogo", Logo.Text)
-
-            };
-                var retorno = DBConnection.InserirOuAtualizarRegistro("MEMP", Empresa);
-                MessageBox.Show(retorno.Mensagem);
-
+                new PadraoRetorno().ApresentaErroTela(ex.Message);
             }
         }
+
 
         private void btnLogo_Click(object sender, EventArgs e)
         {
-            // Criando uma instância do OpenFileDialog
-            OpenFileDialog openFileDialog = new OpenFileDialog
-            {
-                // Definindo o filtro para selecionar apenas arquivos de imagem
-                Filter = "Arquivos de Imagem|*.png;",
-                Title = "Selecione uma Logo"
-            };
+            Thread STAThread = new Thread(
+                delegate ()
+                {
+                    openFileDialog1.Filter = "Arquivos de Imagem|*.png";
+                    openFileDialog1.Title = "Selecione uma Logo";
 
-            // Mostra o diálogo para o usuário escolher o arquivo
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                // Obtém o caminho do arquivo selecionado
-                string caminhoArquivo = openFileDialog.FileName;
-
-                // Exibe o caminho na TextBox
-                Logo.Text = caminhoArquivo;
-
-                // Carrega a imagem na PictureBox
-                PbLogo.Image = new Bitmap(caminhoArquivo);
-            }
+                    if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                    {
+                        string caminhoArquivo = openFileDialog1.FileName;
+                        Logo.Text = caminhoArquivo;
+                        PbLogo.Image = new Bitmap(caminhoArquivo);
+                    }
+                });
+            STAThread.SetApartmentState(ApartmentState.STA);
+            STAThread.Start();
+            STAThread.Join();
         }
+
+
 
         private void Btn2_Click(object sender, EventArgs e)
         {

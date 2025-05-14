@@ -34,8 +34,8 @@ namespace MontanhaTech_GestaoEmpresas
                 }
                 if (selecionados.Contains("Base de dados complementar"))
                 {
-                    //PadraoRetorno padraoRetorno = new CamadaPadrao().CriaCamadaPadrao();
-                    //criadoTabelas = padraoRetorno.Sucesso;
+                    PadraoRetorno padraoRetorno = new CamadaEspecifica().CriaCamadaPadrao();
+                    criadoTabelas = padraoRetorno.Sucesso;
                 }
 
                 if (criadoTabelas)

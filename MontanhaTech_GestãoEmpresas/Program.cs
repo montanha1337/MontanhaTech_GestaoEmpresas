@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using ComponentFactory.Krypton.Toolkit;
 
 namespace MontanhaTech_GestaoEmpresas
 {
@@ -10,14 +10,24 @@ namespace MontanhaTech_GestaoEmpresas
         /// Ponto de entrada principal para o aplicativo.
         /// </summary>
         [STAThread]
-        static void Main()
+        static async Task Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            KryptonManager manager = new KryptonManager();
-            manager.GlobalPaletteMode = PaletteModeManager.Office2010Blue;
+            // Chama o método de serviço periódico
+            //await ServicosPeriodicosAsync();
+
             Application.Run(new TelaInicial());
+        }
+
+        /// <summary>
+        /// Método assíncrono para chamar o processo de atualização de municípios
+        /// </summary>
+        /// <returns></returns>
+        private static async Task ServicosPeriodicosAsync()
+        {
+            await new Mensalmente().RotinaMensal();
         }
     }
 }
