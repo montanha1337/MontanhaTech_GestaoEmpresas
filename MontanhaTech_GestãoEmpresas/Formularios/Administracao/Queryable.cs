@@ -14,16 +14,15 @@ namespace MontanhaTech_GestaoEmpresas
 
         public Pesquisar(DataTable tabela)
         {
-            Pesquisar form = new Pesquisar(); // Instancia o form
-            form.InitializeComponent();
-            form.dados = tabela;
+            InitializeComponent();
+            dados = tabela;
             dataGridView1.DataSource = dados;
             PreencherComboBoxComCampos(dados);
-            padraoRetorno = new PadraoRetorno();
-            padraoRetorno.Sucesso = false;
+            padraoRetorno = new PadraoRetorno { Sucesso = false };
         }
 
-        public Pesquisar()
+        public Pesquisar(string sql)
+    : this(DBConnection.ExecutarConsulta(sql))
         {
         }
 
@@ -32,7 +31,8 @@ namespace MontanhaTech_GestaoEmpresas
             try
             {
                 pesquisaDados();
-            } catch (Exception C)
+            }
+            catch (Exception C)
             {
                 new PadraoRetorno().ApresentaErroTela(C.Message);
             }
@@ -43,7 +43,8 @@ namespace MontanhaTech_GestaoEmpresas
             try
             {
                 pesquisaDados();
-            } catch (Exception C)
+            }
+            catch (Exception C)
             {
                 new PadraoRetorno().ApresentaErroTela(C.Message);
             }
@@ -54,7 +55,8 @@ namespace MontanhaTech_GestaoEmpresas
             try
             {
                 SelecionarLinhaAtual();
-            } catch (Exception C)
+            }
+            catch (Exception C)
             {
                 new PadraoRetorno().ApresentaErroTela(C.Message);
             }
@@ -65,7 +67,8 @@ namespace MontanhaTech_GestaoEmpresas
             try
             {
                 SelecionarLinhaAtual();
-            } catch (Exception C)
+            }
+            catch (Exception C)
             {
                 new PadraoRetorno().ApresentaErroTela(C.Message);
             }
@@ -83,10 +86,12 @@ namespace MontanhaTech_GestaoEmpresas
             if (coluna.DataType == typeof(string))
             {
                 filtro = $"{campo} LIKE '%{valor}%'";
-            } else if (coluna.DataType == typeof(DateTime))
+            }
+            else if (coluna.DataType == typeof(DateTime))
             {
                 filtro = $"{campo} = #{Convert.ToDateTime(valor):MM/dd/yyyy}#";
-            } else if (coluna.DataType == typeof(int) || coluna.DataType == typeof(decimal))
+            }
+            else if (coluna.DataType == typeof(int) || coluna.DataType == typeof(decimal))
             {
                 if (decimal.TryParse(valor, out decimal valorNumerico))
                     filtro = $"{campo} = {valorNumerico}";
