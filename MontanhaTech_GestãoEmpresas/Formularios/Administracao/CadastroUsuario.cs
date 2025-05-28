@@ -16,7 +16,7 @@ namespace MontanhaTech_GestaoEmpresas
         public CadastroUsuario()
         {
             InitializeComponent();
-            Ferramenta.InsereTema();
+            Ferramenta.InsereTema(this, Btn1);
         }
 
         private void CadastroUsuario_Load(object sender, EventArgs e)

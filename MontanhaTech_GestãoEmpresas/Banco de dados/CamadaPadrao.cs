@@ -44,7 +44,8 @@ namespace MontanhaTech_GestaoEmpresas
                     throw new Exception(msgErro);
 
                 return padraoRetorno;
-            } catch (Exception E)
+            }
+            catch (Exception E)
             {
                 new PadraoRetorno().ApresentaErroTela(E.Message);
 
@@ -198,8 +199,6 @@ namespace MontanhaTech_GestaoEmpresas
             return padraoRetorno;
         }
 
-
-
         public PadraoRetorno CadastroItem()
         {
             string tabela = "MITM";
@@ -281,67 +280,45 @@ namespace MontanhaTech_GestaoEmpresas
             padraoRetorno = DBConnection.CriarTabela(tabela);
 
             if (tabelacriada)
+            {
                 msgErro += DBConnection.CriaCampo(tabela, "RazaoSocial", TipoCampo.Texto, 100);
-
-            if (tabelacriada)
                 msgErro += DBConnection.CriaCampo(tabela, "NomeFantasia", TipoCampo.Texto, 100);
-
-            if (tabelacriada)
                 msgErro += DBConnection.CriaCampo(tabela, "CNPJ_CPF", TipoCampo.Texto, 14); // CNPJ ou CPF
-
-            if (tabelacriada)
                 msgErro += DBConnection.CriaCampo(tabela, "TipoPessoa", TipoCampo.Texto, 1); // F=Física, J=Jurídica
-
-            if (tabelacriada)
                 msgErro += DBConnection.CriaCampo(tabela, "InscrEstadual", TipoCampo.Texto, 20); // Pode ser ISENTO
-
-            if (tabelacriada)
                 msgErro += DBConnection.CriaCampo(tabela, "InscrMunicipal", TipoCampo.Texto, 20);
-
-            if (tabelacriada)
                 msgErro += DBConnection.CriaCampo(tabela, "Email", TipoCampo.Texto, 150);
-
-            if (tabelacriada)
                 msgErro += DBConnection.CriaCampo(tabela, "Telefone", TipoCampo.Texto, 15);
-
-            // Endereço
-            if (tabelacriada)
-                msgErro += DBConnection.CriaCampo(tabela, "Logradouro", TipoCampo.Texto, 100);
-
-            if (tabelacriada)
-                msgErro += DBConnection.CriaCampo(tabela, "Numero", TipoCampo.Texto, 10);
-
-            if (tabelacriada)
-                msgErro += DBConnection.CriaCampo(tabela, "Complemento", TipoCampo.Texto, 50);
-
-            if (tabelacriada)
-                msgErro += DBConnection.CriaCampo(tabela, "Bairro", TipoCampo.Texto, 50);
-
-            if (tabelacriada)
-                msgErro += DBConnection.CriaCampo(tabela, "Municipio", TipoCampo.Texto, 60);
-
-            if (tabelacriada)
-                msgErro += DBConnection.CriaCampo(tabela, "CodIBGEMunicipio", TipoCampo.Texto, 10);
-
-            if (tabelacriada)
-                msgErro += DBConnection.CriaCampo(tabela, "UF", TipoCampo.Texto, 2);
-
-            if (tabelacriada)
-                msgErro += DBConnection.CriaCampo(tabela, "CEP", TipoCampo.Texto, 8);
-
-            if (tabelacriada)
-                msgErro += DBConnection.CriaCampo(tabela, "Pais", TipoCampo.Texto, 60);
-
-            if (tabelacriada)
-                msgErro += DBConnection.CriaCampo(tabela, "CodPais", TipoCampo.Texto, 4);
-
-            // Controle
-            if (tabelacriada)
+                // Controle
                 msgErro += DBConnection.CriaCampo(tabela, "DataCadastro", TipoCampo.DataHora);
+                msgErro += DBConnection.CriaCampo(tabela, "Ativo", TipoCampo.Bool);
+            }
+            CadastroEnderecoCliente();
+
+            if (!padraoRetorno.Sucesso)
+                throw new Exception(padraoRetorno.Mensagem);
+
+            return padraoRetorno;
+        }
+
+        public PadraoRetorno CadastroEnderecoCliente()
+        {
+            string tabela = "MCEN";
+            padraoRetorno = DBConnection.CriarTabela(tabela);
 
             if (tabelacriada)
-                msgErro += DBConnection.CriaCampo(tabela, "Ativo", TipoCampo.Bool);
-
+            {
+                // Endereço
+                msgErro += DBConnection.CriaCampo(tabela, "IdCliente", TipoCampo.Numero, 255, "MCLI");
+                msgErro += DBConnection.CriaCampo(tabela, "Logradouro", TipoCampo.Texto, 100);
+                msgErro += DBConnection.CriaCampo(tabela, "Numero", TipoCampo.Numero, 10);
+                msgErro += DBConnection.CriaCampo(tabela, "Complemento", TipoCampo.Texto, 50);
+                msgErro += DBConnection.CriaCampo(tabela, "Bairro", TipoCampo.Texto, 50);
+                msgErro += DBConnection.CriaCampo(tabela, "Municipio", TipoCampo.Numero, 255, "MMUN");
+                msgErro += DBConnection.CriaCampo(tabela, "UF", TipoCampo.Numero, 255, "MOUF");
+                msgErro += DBConnection.CriaCampo(tabela, "CEP", TipoCampo.Texto, 8);
+                msgErro += DBConnection.CriaCampo(tabela, "CodPais", TipoCampo.Texto, 255);
+            }
 
             if (!padraoRetorno.Sucesso)
                 throw new Exception(padraoRetorno.Mensagem);

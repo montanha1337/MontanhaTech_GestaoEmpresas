@@ -13,7 +13,7 @@ namespace MontanhaTech_GestaoEmpresas
         public Login()
         {
             InitializeComponent();
-            Ferramenta.InsereTema();
+            Ferramenta.InsereTema(this, BtnLogin);
         }
 
         private void button1_Click(object sender, EventArgs e)

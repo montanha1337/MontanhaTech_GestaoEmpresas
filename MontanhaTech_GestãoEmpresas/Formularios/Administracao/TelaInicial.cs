@@ -79,6 +79,10 @@ namespace MontanhaTech_GestaoEmpresas
                 case "5":// Atualiza Estoque
                     break;
                 case "6":// Ordem de Serviço
+                    OrdemDeServico OrdemDeServico = new OrdemDeServico();
+                    OrdemDeServico.MdiParent = this;
+                    OrdemDeServico.Show();
+                    OrdemDeServico.BringToFront();
                     break;
                 case "7":// Cadastro Fornecedor
                     break;

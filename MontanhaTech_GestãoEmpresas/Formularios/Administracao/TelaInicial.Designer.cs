@@ -191,8 +191,12 @@
             // 
             // TelaInicial
             // 
+            this.AllowButtonSpecToolTips = true;
+            this.AllowFormChrome = false;
+            this.AllowStatusStripMerge = false;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.BackColor = System.Drawing.SystemColors.WindowText;
             this.BackgroundImage = global::MontanhaTech_GestaoEmpresas.Properties.Resources.logo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -206,6 +210,7 @@
             this.Name = "TelaInicial";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "MontanhaTech_GestãoEmpresa";
             this.TransparencyKey = System.Drawing.Color.White;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -215,7 +220,7 @@
         }
 
         #endregion
-        public Krypton.Toolkit.KryptonTreeView MenuInicial;
         private System.Windows.Forms.ImageList imageList1;
+        public Krypton.Toolkit.KryptonTreeView MenuInicial;
     }
 }
