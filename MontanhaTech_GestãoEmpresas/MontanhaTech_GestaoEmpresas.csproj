@@ -298,6 +298,12 @@
     <Compile Include="Formularios\Administracao\Queryable.Designer.cs">
       <DependentUpon>Queryable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Administracao\TelaDetalhe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\Administracao\TelaDetalhe.Designer.cs">
+      <DependentUpon>TelaDetalhe.cs</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Clientes\CadastroCliente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -344,6 +350,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Administracao\Queryable.resx">
       <DependentUpon>Queryable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\Administracao\TelaDetalhe.resx">
+      <DependentUpon>TelaDetalhe.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Clientes\CadastroCliente.resx">
       <DependentUpon>CadastroCliente.cs</DependentUpon>

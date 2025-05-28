@@ -1,13 +1,11 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
+using MontanhaTech_GestaoEmpresas.DataSouces.TabelaClienteTableAdapters;
 using MontanhaTech_GestaoEmpresas.Framework;
 using System;
 using System.Data;
-using System.Reflection;
-using MontanhaTech_GestaoEmpresas.DataSouces.TabelaClienteTableAdapters;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
-using MontanhaTech_GestaoEmpresas.DataSouces.TabelaEmpresaTableAdapters;
-using MontanhaTech_GestaoEmpresas.DataSouces;
 
 namespace MontanhaTech_GestaoEmpresas
 {
@@ -27,7 +25,8 @@ namespace MontanhaTech_GestaoEmpresas
                 this.mCMTTableAdapter.Fill(this.tabelaCliente.MCMT);
                 // TODO: esta linha de código carrega dados na tabela 'tabelaCliente.MCLI'. Você pode movê-la ou removê-la conforme necessário.
                 this.mCLITableAdapter.Fill(this.tabelaCliente.MCLI);
-            } catch (Exception C)
+            }
+            catch (Exception C)
             {
                 new PadraoRetorno().ApresentaErroTela(C.Message);
             }
@@ -39,7 +38,8 @@ namespace MontanhaTech_GestaoEmpresas
             {
                 e.Row.Cells[3].Value = true;
                 e.Row.Cells[4].Value = Code.Text;
-            } catch (Exception C)
+            }
+            catch (Exception C)
             {
                 new PadraoRetorno().ApresentaErroTela(C.Message);
             }
@@ -49,13 +49,9 @@ namespace MontanhaTech_GestaoEmpresas
         {
             try
             {
-                // Suponha que seu BindingSource tenha um campo "Id" e você quer filtrar com base nesse campo.
-                string filtro = string.IsNullOrEmpty(Code.Text)
-                    ? string.Empty
-                    : $"IdCliente = {Code.Text}";
-
-                mCMTBindingSource.Filter = filtro; // Aplica o filtro diretamente no Binding
-            } catch (Exception C)
+                CarregaLinha(Code.Text);
+            }
+            catch (Exception C)
             {
                 new PadraoRetorno().ApresentaErroTela(C.Message);
             }
@@ -111,7 +107,8 @@ namespace MontanhaTech_GestaoEmpresas
                     // Invoca o método "Insert" para adicionar o registro no banco
                     insertMethod.Invoke(mCLITableAdapter, valores);
                     inserido = true;
-                } else
+                }
+                else
                 {
                     // Se o registro já existe, atualiza o DataTable com as alterações
                     mCLITableAdapter.Update(tabelaCliente.MCLI);
@@ -174,7 +171,8 @@ namespace MontanhaTech_GestaoEmpresas
                                 // Invoca o método "Insert" para adicionar o veículo no banco
                                 insertMethod.Invoke(mCMTTableAdapter, valores);
                                 inserido = true;
-                            } else
+                            }
+                            else
                             {
                                 // Se o veículo já existe, atualiza o DataTable com as alterações
                                 mCMTTableAdapter.Update(tabelaCliente.MCMT);
@@ -185,11 +183,11 @@ namespace MontanhaTech_GestaoEmpresas
                         }
                     }
                 }
-                inserido = true;
 
                 // Exibe uma mensagem de sucesso para o usuário
                 new PadraoRetorno().ApresentaSucessoTela(inserido ? "Cliente e veículos inseridos com sucesso!" : "Cliente e veículos atualizados com sucesso!");
-            } catch (Exception C)
+            }
+            catch (Exception C)
             {
                 // Exibe uma mensagem de erro para o usuário caso ocorra uma exceção
                 new PadraoRetorno().ApresentaErroTela(C.Message);
@@ -200,20 +198,62 @@ namespace MontanhaTech_GestaoEmpresas
         {
             try
             {
-                Ferramenta.PesquisaDados(mCLIBindingSource, "MCLI");
-            } catch (Exception C)
+                Form formAberto = Application.OpenForms["TelaInicial"];
+
+                if (formAberto != null)
+                {
+                    string sql = "SELECT * FROM [MCLI]";
+
+                    // Usa o construtor que recebe SQL
+                    Pesquisar formPesquisa = new Pesquisar(sql);
+                    formPesquisa.MdiParent = formAberto;
+
+                    formPesquisa.OnValorSelecionado += (valorSelecionado) =>
+                    {
+                        string filtro = string.IsNullOrEmpty(valorSelecionado)
+                            ? string.Empty
+                            : $"Id = {valorSelecionado}";
+
+                        mCLIBindingSource.Filter = filtro;
+                    };
+
+                    formPesquisa.Show();
+                }
+            }
+            catch (Exception C)
             {
                 new PadraoRetorno().ApresentaErroTela(C.Message);
             }
         }
 
-
         private void button4_Click(object sender, EventArgs e)
         {
             try
             {
+                Form formAberto = Application.OpenForms["TelaInicial"];
 
-            } catch (Exception C)
+                if (formAberto != null)
+                {
+                    string Modelo = dataGridView1.CurrentRow.Cells[1].Value.ToString();
+
+                    if (!string.IsNullOrEmpty(Modelo))
+                    {
+                        // Filtra todas as motos com o Id correspondente
+                        string sql = "SELECT * FROM [MCMT]";
+
+                        // Usa o construtor que recebe SQL
+                        Detalhe Detalhe = new Detalhe(sql, Modelo, "Modelo", "Veículo");
+                        Detalhe.MdiParent = formAberto;
+
+                        Detalhe.Show();
+                    }
+                    else
+                    {
+                        throw new Exception("Selecione uma moto para continuar.");
+                    }
+                }
+            }
+            catch (Exception C)
             {
                 // Exibe uma mensagem de erro para o usuário caso ocorra uma exceção
                 new PadraoRetorno().ApresentaErroTela(C.Message);
@@ -243,14 +283,22 @@ namespace MontanhaTech_GestaoEmpresas
                     tabelaCliente.MCMT.AcceptChanges();
 
                     new PadraoRetorno().ApresentaSucessoTela("Motos excluídas com sucesso!");
-                } else
+                }
+                else
                 {
                     throw new Exception("Selecione uma moto para continuar.");
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 new PadraoRetorno().ApresentaErroTela("Erro ao excluir motos: " + ex.Message);
             }
+        }
+
+        private void CarregaLinha(string Id)
+        {
+            if (!string.IsNullOrWhiteSpace(Id))
+                mCMTBindingSource.Filter = $"IdCliente = {Id}";
         }
     }
 }
