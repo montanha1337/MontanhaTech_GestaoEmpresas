@@ -259,6 +259,16 @@
     <Compile Include="Banco de dados\Consultas\SQLServMensal.cs" />
     <Compile Include="Banco de dados\Consultas\SQLTelaInicial.cs" />
     <Compile Include="Banco de dados\DBConnection.cs" />
+    <Compile Include="DataSouces\Estado.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Estado.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSouces\Municipio.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Municipio.xsd</DependentUpon>
+    </Compile>
     <Compile Include="DataSouces\TabelaCliente.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -310,6 +320,12 @@
     <Compile Include="Formularios\Clientes\CadastroCliente.Designer.cs">
       <DependentUpon>CadastroCliente.cs</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Estoque\OrdemDeServico.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\Estoque\OrdemDeServico.Designer.cs">
+      <DependentUpon>OrdemDeServico.cs</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Financeiro\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -357,6 +373,9 @@
     <EmbeddedResource Include="Formularios\Clientes\CadastroCliente.resx">
       <DependentUpon>CadastroCliente.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\Estoque\OrdemDeServico.resx">
+      <DependentUpon>OrdemDeServico.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Financeiro\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -379,6 +398,28 @@
     <EmbeddedResource Include="Formularios\Administracao\TelaInicial.resx">
       <DependentUpon>TelaInicial.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="DataSouces\Estado.xsc">
+      <DependentUpon>Estado.xsd</DependentUpon>
+    </None>
+    <None Include="DataSouces\Estado.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Estado.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="DataSouces\Estado.xss">
+      <DependentUpon>Estado.xsd</DependentUpon>
+    </None>
+    <None Include="DataSouces\Municipio.xsc">
+      <DependentUpon>Municipio.xsd</DependentUpon>
+    </None>
+    <None Include="DataSouces\Municipio.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Municipio.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="DataSouces\Municipio.xss">
+      <DependentUpon>Municipio.xsd</DependentUpon>
+    </None>
     <None Include="DataSouces\TabelaCliente.xsc">
       <DependentUpon>TabelaCliente.xsd</DependentUpon>
     </None>
@@ -430,7 +471,6 @@
     <None Include="Resources\logoPng - Copia1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Formularios\Estoque\" />
     <Folder Include="Formularios\Fornecedor\" />
     <Folder Include="Formularios\Relatorios\" />
   </ItemGroup>

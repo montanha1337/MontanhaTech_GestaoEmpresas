@@ -87,6 +87,17 @@ namespace MontanhaTech_GestaoEmpresas.Framework
         /// <summary>
         /// Inclui o tema no formulário
         /// </summary>
+        public static void InsereTema(Form oForm, Button BotaoClick)
+        {
+            KryptonManager manager = new KryptonManager();
+            manager.GlobalPaletteMode = PaletteModeManager.SparkleBlue;
+            oForm.KeyPreview = true;
+            oForm.KeyDown += (s, e) => TratarTecla(e, BotaoClick);
+        }
+
+        /// <summary>
+        /// Inclui o tema no formulário
+        /// </summary>
         public static void InsereTema()
         {
             KryptonManager manager = new KryptonManager();
@@ -164,6 +175,19 @@ namespace MontanhaTech_GestaoEmpresas.Framework
                 };
 
                 formPesquisa.Show();
+            }
+        }
+
+        /// <summary>
+        /// Cria o evento de enter nos forms
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="botao"></param>
+        public static void TratarTecla(KeyEventArgs e, Button botao)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                botao.PerformClick();
             }
         }
         #endregion

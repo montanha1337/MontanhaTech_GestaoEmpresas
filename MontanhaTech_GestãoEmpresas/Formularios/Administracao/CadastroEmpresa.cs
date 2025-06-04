@@ -16,7 +16,7 @@ namespace MontanhaTech_GestaoEmpresas
         public CadastroEmpresa()
         {
             InitializeComponent();
-            Ferramenta.InsereTema();
+            Ferramenta.InsereTema(this, Btn1);
             Ferramenta.PreencherComboBox(TipoEmp, "MTEP", "RegraNegocio", "Id");
         }
 

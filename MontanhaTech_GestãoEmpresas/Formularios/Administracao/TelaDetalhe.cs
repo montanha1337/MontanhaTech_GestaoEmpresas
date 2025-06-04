@@ -1,4 +1,5 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
+using MontanhaTech_GestaoEmpresas.Framework;
 using System;
 using System.Data;
 using System.Windows.Forms;
@@ -12,6 +13,7 @@ namespace MontanhaTech_GestaoEmpresas
         public Detalhe(DataTable tabela, string Dado, string Label, string Titulo)
         {
             InitializeComponent();
+            Ferramenta.InsereTema(this, button1);
             dados = tabela;
             dataGridView1.DataSource = dados;
             dado.Text = Dado;

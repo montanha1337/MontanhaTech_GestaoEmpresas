@@ -14,17 +14,27 @@ namespace MontanhaTech_GestaoEmpresas
         public CadastroCliente()
         {
             InitializeComponent();
-            Ferramenta.InsereTema();
+            Ferramenta.InsereTema(this, button1);
         }
 
         private void CadastroCliente_Load(object sender, EventArgs e)
         {
+            // TODO: esta linha de código carrega dados na tabela 'estado1.MOUF'. Você pode movê-la ou removê-la conforme necessário.
+            this.mOUFTableAdapter.Fill(this.estado1.MOUF);
+            // TODO: esta linha de código carrega dados na tabela 'municipio1.MMUN'. Você pode movê-la ou removê-la conforme necessário.
+            this.mMUNTableAdapter.Fill(this.municipio1.MMUN);
+            // TODO: esta linha de código carrega dados na tabela 'tabelaCliente.MCEN'. Você pode movê-la ou removê-la conforme necessário.
+            this.mCENTableAdapter.Fill(this.tabelaCliente.MCEN);
+            // TODO: esta linha de código carrega dados na tabela 'tabelaCliente.MCMT'. Você pode movê-la ou removê-la conforme necessário.
+            this.mCMTTableAdapter.Fill(this.tabelaCliente.MCMT);
             try
             {
                 // TODO: esta linha de código carrega dados na tabela 'tabelaCliente.MCMT'. Você pode movê-la ou removê-la conforme necessário.
                 this.mCMTTableAdapter.Fill(this.tabelaCliente.MCMT);
                 // TODO: esta linha de código carrega dados na tabela 'tabelaCliente.MCLI'. Você pode movê-la ou removê-la conforme necessário.
                 this.mCLITableAdapter.Fill(this.tabelaCliente.MCLI);
+                // TODO: esta linha de código carrega dados na tabela 'tabelaCliente.MCEN'. Você pode movê-la ou removê-la conforme necessário.
+                this.mCENTableAdapter.Fill(this.tabelaCliente.MCEN);
             }
             catch (Exception C)
             {
@@ -49,7 +59,7 @@ namespace MontanhaTech_GestaoEmpresas
         {
             try
             {
-                CarregaLinha(Code.Text);
+                //CarregaLinha(Code.Text);
             }
             catch (Exception C)
             {
@@ -68,7 +78,6 @@ namespace MontanhaTech_GestaoEmpresas
             {
                 // Finaliza a edição do BindingSource para garantir que os dados sejam salvos
                 mCLIBindingSource.EndEdit();
-                mCMTBindingSource.EndEdit();
 
                 // Verifica se o registro já existe no DataTable "MCLI" baseado no "Id"
                 DataRow linhaExistente = tabelaCliente.MCLI.Rows
@@ -137,46 +146,46 @@ namespace MontanhaTech_GestaoEmpresas
                         if (rowMoto.RowState != DataRowState.Deleted)
                         {
                             // Finaliza a edição do BindingSource de veículos
-                            mCMTBindingSource.EndEdit();
+                            //mCMTBindingSource.EndEdit();
 
-                            // Verifica se o registro do veículo já existe no DataTable "MCMT"
-                            linhaExistente = tabelaCliente.MCMT.Rows
-                                .Cast<DataRow>()
-                                .FirstOrDefault(row1 => row1["Id"].Equals(((DataRowView)mCMTBindingSource.Current)["Id"]));
+                            //// Verifica se o registro do veículo já existe no DataTable "MCMT"
+                            //linhaExistente = tabelaCliente.MCMT.Rows
+                            //    .Cast<DataRow>()
+                            //    .FirstOrDefault(row1 => row1["Id"].Equals(((DataRowView)mCMTBindingSource.Current)["Id"]));
 
-                            if (linhaExistente == null)
-                            {
-                                // Se o veículo não existe, insere um novo
-                                MethodInfo insertMethod = typeof(MCMTTableAdapter).GetMethod("Insert");
-                                ParameterInfo[] parametros = insertMethod.GetParameters();
-                                object[] valores = new object[parametros.Length];
+                            //if (linhaExistente == null)
+                            //{
+                            //    // Se o veículo não existe, insere um novo
+                            //    MethodInfo insertMethod = typeof(MCMTTableAdapter).GetMethod("Insert");
+                            //    ParameterInfo[] parametros = insertMethod.GetParameters();
+                            //    object[] valores = new object[parametros.Length];
 
-                                // Preenche os valores para a inserção do veículo
-                                for (int i = 0; i < parametros.Length; i++)
-                                {
-                                    string nomeColuna = parametros[i].Name;
-                                    object valor = rowMoto.Table.Columns.Contains(nomeColuna) ? rowMoto[nomeColuna] : null;
+                            //    // Preenche os valores para a inserção do veículo
+                            //    for (int i = 0; i < parametros.Length; i++)
+                            //    {
+                            //        string nomeColuna = parametros[i].Name;
+                            //        object valor = rowMoto.Table.Columns.Contains(nomeColuna) ? rowMoto[nomeColuna] : null;
 
-                                    // Define valores padrão se o valor for nulo ou DBNull
-                                    if (valor == DBNull.Value || valor == null)
-                                    {
-                                        if (parametros[i].ParameterType == typeof(string)) valor = "";
-                                        else if (parametros[i].ParameterType == typeof(byte[])) valor = new byte[0];
-                                        else if (parametros[i].ParameterType.IsValueType) valor = Activator.CreateInstance(parametros[i].ParameterType);
-                                    }
+                            //        // Define valores padrão se o valor for nulo ou DBNull
+                            //        if (valor == DBNull.Value || valor == null)
+                            //        {
+                            //            if (parametros[i].ParameterType == typeof(string)) valor = "";
+                            //            else if (parametros[i].ParameterType == typeof(byte[])) valor = new byte[0];
+                            //            else if (parametros[i].ParameterType.IsValueType) valor = Activator.CreateInstance(parametros[i].ParameterType);
+                            //        }
 
-                                    valores[i] = valor;
-                                }
+                            //        valores[i] = valor;
+                            //    }
 
-                                // Invoca o método "Insert" para adicionar o veículo no banco
-                                insertMethod.Invoke(mCMTTableAdapter, valores);
-                                inserido = true;
-                            }
-                            else
-                            {
-                                // Se o veículo já existe, atualiza o DataTable com as alterações
-                                mCMTTableAdapter.Update(tabelaCliente.MCMT);
-                            }
+                            //    // Invoca o método "Insert" para adicionar o veículo no banco
+                            //    insertMethod.Invoke(mCMTTableAdapter, valores);
+                            //    inserido = true;
+                            //}
+                            //else
+                            //{
+                            //    // Se o veículo já existe, atualiza o DataTable com as alterações
+                            //    mCMTTableAdapter.Update(tabelaCliente.MCMT);
+                            //}
 
                             // Confirma as alterações no DataTable dos veículos
                             tabelaCliente.MCMT.AcceptChanges();
@@ -295,10 +304,9 @@ namespace MontanhaTech_GestaoEmpresas
             }
         }
 
-        private void CarregaLinha(string Id)
+        private void Remover_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(Id))
-                mCMTBindingSource.Filter = $"IdCliente = {Id}";
+
         }
     }
 }

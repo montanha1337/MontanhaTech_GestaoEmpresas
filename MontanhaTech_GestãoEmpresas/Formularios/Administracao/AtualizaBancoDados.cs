@@ -13,7 +13,7 @@ namespace MontanhaTech_GestaoEmpresas
         public AtualizaBancoDados()
         {
             InitializeComponent();
-            Ferramenta.InsereTema();
+            Ferramenta.InsereTema(this,Btn1);
         }
 
         private void Btn1_Click(object sender, EventArgs e)

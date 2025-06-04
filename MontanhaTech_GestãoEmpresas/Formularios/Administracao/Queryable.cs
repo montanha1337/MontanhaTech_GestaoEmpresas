@@ -15,6 +15,7 @@ namespace MontanhaTech_GestaoEmpresas
         public Pesquisar(DataTable tabela)
         {
             InitializeComponent();
+            Ferramenta.InsereTema(this, button1);
             dados = tabela;
             dataGridView1.DataSource = dados;
             PreencherComboBoxComCampos(dados);
