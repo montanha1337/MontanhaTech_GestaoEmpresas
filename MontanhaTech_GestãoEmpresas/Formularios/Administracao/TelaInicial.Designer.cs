@@ -213,7 +213,6 @@
             this.ShowInTaskbar = false;
             this.Text = "MontanhaTech_GestãoEmpresa";
             this.TransparencyKey = System.Drawing.Color.White;
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.TelaInicial_Load);
             this.ResumeLayout(false);
 
