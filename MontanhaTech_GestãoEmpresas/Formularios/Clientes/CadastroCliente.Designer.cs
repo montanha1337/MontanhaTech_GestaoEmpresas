@@ -77,16 +77,6 @@ namespace MontanhaTech_GestaoEmpresas
             this.mCENTableAdapter = new MontanhaTech_GestaoEmpresas.DataSouces.TabelaClienteTableAdapters.MCENTableAdapter();
             this.mMUNTableAdapter = new MontanhaTech_GestaoEmpresas.DataSouces.MunicipioTableAdapters.MMUNTableAdapter();
             this.mOUFTableAdapter = new MontanhaTech_GestaoEmpresas.DataSouces.EstadoTableAdapters.MOUFTableAdapter();
-            this.idDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.idClienteDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.logradouroDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.numeroDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.complementoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.bairroDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.municipioDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.uFDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.cEPDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.codPaisDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.Motos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -482,75 +472,6 @@ namespace MontanhaTech_GestaoEmpresas
             // mOUFTableAdapter
             // 
             this.mOUFTableAdapter.ClearBeforeFill = true;
-            // 
-            // idDataGridViewTextBoxColumn1
-            // 
-            this.idDataGridViewTextBoxColumn1.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn1.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn1.Name = "idDataGridViewTextBoxColumn1";
-            this.idDataGridViewTextBoxColumn1.ReadOnly = true;
-            this.idDataGridViewTextBoxColumn1.Visible = false;
-            // 
-            // idClienteDataGridViewTextBoxColumn1
-            // 
-            this.idClienteDataGridViewTextBoxColumn1.DataPropertyName = "IdCliente";
-            this.idClienteDataGridViewTextBoxColumn1.HeaderText = "IdCliente";
-            this.idClienteDataGridViewTextBoxColumn1.Name = "idClienteDataGridViewTextBoxColumn1";
-            this.idClienteDataGridViewTextBoxColumn1.Visible = false;
-            // 
-            // logradouroDataGridViewTextBoxColumn
-            // 
-            this.logradouroDataGridViewTextBoxColumn.DataPropertyName = "Logradouro";
-            this.logradouroDataGridViewTextBoxColumn.HeaderText = "Logradouro (Rua)";
-            this.logradouroDataGridViewTextBoxColumn.Name = "logradouroDataGridViewTextBoxColumn";
-            // 
-            // numeroDataGridViewTextBoxColumn
-            // 
-            this.numeroDataGridViewTextBoxColumn.DataPropertyName = "Numero";
-            this.numeroDataGridViewTextBoxColumn.HeaderText = "Número";
-            this.numeroDataGridViewTextBoxColumn.Name = "numeroDataGridViewTextBoxColumn";
-            // 
-            // complementoDataGridViewTextBoxColumn
-            // 
-            this.complementoDataGridViewTextBoxColumn.DataPropertyName = "Complemento";
-            this.complementoDataGridViewTextBoxColumn.HeaderText = "Complemento";
-            this.complementoDataGridViewTextBoxColumn.Name = "complementoDataGridViewTextBoxColumn";
-            // 
-            // bairroDataGridViewTextBoxColumn
-            // 
-            this.bairroDataGridViewTextBoxColumn.DataPropertyName = "Bairro";
-            this.bairroDataGridViewTextBoxColumn.HeaderText = "Bairro";
-            this.bairroDataGridViewTextBoxColumn.Name = "bairroDataGridViewTextBoxColumn";
-            // 
-            // municipioDataGridViewTextBoxColumn
-            // 
-            this.municipioDataGridViewTextBoxColumn.DataPropertyName = "Municipio";
-            this.municipioDataGridViewTextBoxColumn.DataSource = this.mMUNBindingSource;
-            this.municipioDataGridViewTextBoxColumn.HeaderText = "Município";
-            this.municipioDataGridViewTextBoxColumn.Name = "municipioDataGridViewTextBoxColumn";
-            this.municipioDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.municipioDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // uFDataGridViewTextBoxColumn
-            // 
-            this.uFDataGridViewTextBoxColumn.DataPropertyName = "UF";
-            this.uFDataGridViewTextBoxColumn.DataSource = this.mOUFBindingSource;
-            this.uFDataGridViewTextBoxColumn.HeaderText = "Estado";
-            this.uFDataGridViewTextBoxColumn.Name = "uFDataGridViewTextBoxColumn";
-            this.uFDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.uFDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // cEPDataGridViewTextBoxColumn
-            // 
-            this.cEPDataGridViewTextBoxColumn.DataPropertyName = "CEP";
-            this.cEPDataGridViewTextBoxColumn.HeaderText = "CEP";
-            this.cEPDataGridViewTextBoxColumn.Name = "cEPDataGridViewTextBoxColumn";
-            // 
-            // codPaisDataGridViewTextBoxColumn
-            // 
-            this.codPaisDataGridViewTextBoxColumn.DataPropertyName = "CodPais";
-            this.codPaisDataGridViewTextBoxColumn.HeaderText = "País";
-            this.codPaisDataGridViewTextBoxColumn.Name = "codPaisDataGridViewTextBoxColumn";
             // 
             // CadastroCliente
             // 
